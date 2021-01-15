@@ -466,8 +466,15 @@ class FlutterContacts {
             }
 
             // Save
-            resolver.applyBatch(ContactsContract.AUTHORITY, ArrayList(ops))
-            ops =  ArrayList<ContentProviderOperation>(100)
+            
+
+            try {
+                resolver.applyBatch(ContactsContract.AUTHORITY, ArrayList(ops))
+            }
+            catch (e: Exception) {
+                }
+            
+           
 
             return null
         }
