@@ -19,7 +19,6 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredName
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal
 import android.provider.ContactsContract.CommonDataKinds.Website
 import android.provider.ContactsContract.Contacts
-import android.provider.ContactsContract.Phone
 import android.provider.ContactsContract.Data
 import android.provider.ContactsContract.RawContacts
 import java.io.FileNotFoundException
@@ -785,7 +784,7 @@ class FlutterContacts {
             val phoneArgs = arrayOf(contact.id)
 
             // note we're running on Phone.CONTENT_URI, so no need to limit MIMTETYPE
-            val phonesDelete = ContentProviderOperation.newDelete(ContactsContract.Phone.CONTENT_URI) 
+            val phonesDelete = ContentProviderOperation.newDelete(ContactsContract.CommonDataKinds.Phone.CONTENT_URI) 
                                     .withSelection(phonesSelection, phoneArgs)
                                     .build()
             ops.add(phonesDelete)
