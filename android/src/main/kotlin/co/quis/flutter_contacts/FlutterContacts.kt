@@ -19,6 +19,7 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredName
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal
 import android.provider.ContactsContract.CommonDataKinds.Website
 import android.provider.ContactsContract.Contacts
+import android.provider.ContactsContract.Phone
 import android.provider.ContactsContract.Data
 import android.provider.ContactsContract.RawContacts
 import java.io.FileNotFoundException
