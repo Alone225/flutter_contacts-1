@@ -788,7 +788,15 @@ class FlutterContacts {
                                     .withSelection(phonesSelection, phoneArgs)
                                     .build()
             ops.add(phonesDelete)
-            for ((i, phone) in contact.phones.withIndex()) {
+
+           contact.phones.forEach {
+                val addPhone = ContentProviderOperation.newInsert(ContactsContract.CommonDataKinds.Phone.CONTENT_URI)
+                    .withValue(Phone.RAW_CONTACT_ID, rawContactId)
+                    .withValue(Phone.NUMBER, emptyToNull(phone.number))
+                    .build()
+                ops.add(addPhone)
+            }
+            /*for ((i, phone) in contact.phones.withIndex()) {
                 println(phone.number)
                 val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
                 ops.add(
@@ -800,7 +808,7 @@ class FlutterContacts {
                         .withValue(Data.IS_PRIMARY, if (phone.isPrimary) 1 else 0)
                         .build()
                 )
-            }
+            }*/
             for ((i, email) in contact.emails.withIndex()) {
                 val labelPair: EmailLabelPair = getEmailLabelInv(email.label, email.customLabel)
                 ops.add(
