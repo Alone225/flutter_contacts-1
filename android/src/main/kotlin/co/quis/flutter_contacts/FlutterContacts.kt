@@ -780,6 +780,7 @@ class FlutterContacts {
                         .build()
                 )
             }
+            
             for ((i, phone) in contact.phones.withIndex()) {
                 println(phone.number)
                 val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
