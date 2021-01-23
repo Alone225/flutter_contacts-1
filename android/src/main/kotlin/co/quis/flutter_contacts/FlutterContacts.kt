@@ -749,11 +749,7 @@ class FlutterContacts {
             println(contact.displayName)
             println(rawContactId)
             fun newInsert(): ContentProviderOperation.Builder =
-                if (rawContactId != null)
-                    ContentProviderOperation
-                        .newInsert(Data.CONTENT_URI)
-                        .withValue(Data.RAW_CONTACT_ID, rawContactId)
-                else
+                
                     ContentProviderOperation
                         .newInsert(Data.CONTENT_URI)
                         .withValueBackReference(Data.RAW_CONTACT_ID, 0)
@@ -780,7 +776,7 @@ class FlutterContacts {
                         .build()
                 )
             }
-            
+
             for ((i, phone) in contact.phones.withIndex()) {
                 println(phone.number)
                 val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
