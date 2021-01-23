@@ -746,7 +746,8 @@ class FlutterContacts {
             rawContactId: String? = null
         ) {
             fun emptyToNull(s: String): String? = if (s.isEmpty()) "" else s
-
+            println(contact.displayName)
+            println(rawContactId)
             fun newInsert(): ContentProviderOperation.Builder =
                 if (rawContactId != null)
                     ContentProviderOperation
@@ -779,16 +780,6 @@ class FlutterContacts {
                         .build()
                 )
             }
-            val contactId = contact.id
-            ContentProviderOperation.newDelete(Data.CONTENT_URI)
-                    .withSelection(
-                        "${RawContacts.CONTACT_ID}=? and ${Data.MIMETYPE} in (?)",
-                        arrayOf(
-                            contactId,
-                            Phone.CONTENT_ITEM_TYPE,
-                        )
-                    )
-                    .build()
             for ((i, phone) in contact.phones.withIndex()) {
                 println(phone.number)
                 val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
