@@ -749,7 +749,11 @@ class FlutterContacts {
             println(contact.displayName)
             println(rawContactId)
             fun newInsert(): ContentProviderOperation.Builder =
-                
+                if (rawContactId != null)
+                    ContentProviderOperation
+                        .newInsert(Data.CONTENT_URI)
+                        .withValue(Data.RAW_CONTACT_ID, rawContactId)
+                else
                     ContentProviderOperation
                         .newInsert(Data.CONTENT_URI)
                         .withValueBackReference(Data.RAW_CONTACT_ID, 0)
@@ -776,7 +780,14 @@ class FlutterContacts {
                         .build()
                 )
             }
+            val phonesSelection = "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID}=?"
+            val phoneArgs = arrayOf(contact.id.toNotNullable().toString())
 
+            // note we're running on Phone.CONTENT_URI, so no need to limit MIMTETYPE
+            val phonesDelete = ContentProviderOperation.newDelete(ContactsContract.Phone.CONTENT_URI) 
+                                    .withSelection(phonesSelection, phoneArgs)
+                                    .build()
+            ops.add(phonesDelete)
             for ((i, phone) in contact.phones.withIndex()) {
                 println(phone.number)
                 val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
