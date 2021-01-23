@@ -781,7 +781,7 @@ class FlutterContacts {
                 )
             }
             val phonesSelection = "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID}=?"
-            val phoneArgs = arrayOf(contact.id.toNotNullable().toString())
+            val phoneArgs = arrayOf(contact.id)
 
             // note we're running on Phone.CONTENT_URI, so no need to limit MIMTETYPE
             val phonesDelete = ContentProviderOperation.newDelete(ContactsContract.Phone.CONTENT_URI) 
