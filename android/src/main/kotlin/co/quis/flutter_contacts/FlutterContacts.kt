@@ -789,7 +789,8 @@ class FlutterContacts {
                                     .build()
             ops.add(phonesDelete)
 
-           contact.phones.forEach {
+           
+            for ((i, phone) in contact.phones.withIndex()) {
                 val addPhone = ContentProviderOperation.newInsert(ContactsContract.CommonDataKinds.Phone.CONTENT_URI)
                     .withValue(Phone.RAW_CONTACT_ID, rawContactId)
                     .withValue(Phone.NUMBER, emptyToNull(phone.number))
