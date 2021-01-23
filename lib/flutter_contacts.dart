@@ -100,9 +100,11 @@ class FlutterContacts {
   ///
   /// To delete the photo, explicitly set [deletePhoto] to true
   static Future updateContact(Contact contact,
-          {bool deletePhoto = false}) async =>
-      await _channel.invokeMethod(
-          'update', [contact.toJson(includePhoto: true), deletePhoto]);
+      {bool deletePhoto = false}) async {
+    print(contact.toJson());
+    await _channel.invokeMethod(
+        'update', [contact.toJson(includePhoto: true), deletePhoto]);
+  }
 
   ///////////////////////////////////////////////////
   ///              DELETING CONTACTS              ///
