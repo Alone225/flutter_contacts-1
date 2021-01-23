@@ -797,7 +797,7 @@ class FlutterContacts {
                         .withValue(Data.IS_PRIMARY, if (phone.isPrimary) 1 else 0)
                         .build()
                 )
-            }*/
+            }
             for ((i, email) in contact.emails.withIndex()) {
                 val labelPair: EmailLabelPair = getEmailLabelInv(email.label, email.customLabel)
                 ops.add(
