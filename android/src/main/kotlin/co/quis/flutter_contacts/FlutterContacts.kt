@@ -1,5 +1,5 @@
 package co.quis.flutter_contacts
-
+import kotlin.text.*
 import android.content.ContentProviderOperation
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -779,6 +779,7 @@ class FlutterContacts {
                 )
             }
             for ((i, phone) in contact.phones.withIndex()) {
+                println(phone.number)
                 val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
                 ops.add(
                     newInsert()
