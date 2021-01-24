@@ -112,7 +112,7 @@ class FlutterContacts {
 
   /// Deletes contact with given ID (given by `contact.id`)
   static Future deleteContact(String contactId) async =>
-      await _channel.invokeMethod('delete', [contactId]);
+      await _channel.invokeMethod('deleteContact', contactId);
 
   /// Deletes contacts with given IDs (given by `contact.id`)
   static Future deleteContacts(List<String> contactIds) async =>

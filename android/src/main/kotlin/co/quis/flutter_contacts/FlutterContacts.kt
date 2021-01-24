@@ -478,7 +478,17 @@ class FlutterContacts {
 
             return null
         }
+        fun deleteContact(resolver: ContentResolver, contactId: String) {
+            val ops = mutableListOf<ContentProviderOperation>()
 
+            ops.add(
+                    ContentProviderOperation.newDelete(RawContacts.CONTENT_URI)
+                        .withSelection("${RawContacts.CONTACT_ID}=?", arrayOf(contactId))
+                        .build()
+                )
+
+            resolver.applyBatch(ContactsContract.AUTHORITY, ArrayList(ops))
+        }
         fun delete(resolver: ContentResolver, contactIds: List<String>) {
             val ops = mutableListOf<ContentProviderOperation>()
 
@@ -780,11 +790,7 @@ class FlutterContacts {
                         .build()
                 )
             }
-            val phonesSelection = "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID}=?"
-            val phoneArgs = arrayOf(contact.id)
-            val phonesDelete = ContentProviderOperation.newDelete(ContactsContract.CommonDataKinds.Phone.CONTENT_URI) 
-                                    .withSelection(phonesSelection, phoneArgs)
-                                    .build()
+            
             for ((i, phone) in contact.phones.withIndex()) {
                 println(phone.number)
                 val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
