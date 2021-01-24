@@ -107,11 +107,6 @@ public class FlutterContactsPlugin : FlutterPlugin, MethodCallHandler, EventChan
                     FlutterContacts.delete(resolver!!, call.arguments as List<String>)
                     GlobalScope.launch(Dispatchers.Main) { result.success(null) }
                 }
-            "deleteContact" ->
-                GlobalScope.launch(Dispatchers.IO) {
-                    FlutterContacts.deleteContact(resolver!!, call.arguments as String)
-                    GlobalScope.launch(Dispatchers.Main) { result.success(null) }
-                }
             else -> result.notImplemented()
         }
     }
