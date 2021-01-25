@@ -447,6 +447,11 @@ class FlutterContacts {
                     )
                     .build()
             )
+            try {
+                resolver.applyBatch(ContactsContract.AUTHORITY, ArrayList(ops))
+            }
+            catch (e: Exception) {
+                }
             if (deletePhoto) {
                 ops.add(
                     ContentProviderOperation.newDelete(Data.CONTENT_URI)
