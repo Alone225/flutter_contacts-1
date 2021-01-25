@@ -430,26 +430,15 @@ class FlutterContacts {
             ops.add(
                 ContentProviderOperation.newDelete(Data.CONTENT_URI)
                     .withSelection(
-                        "${RawContacts.CONTACT_ID}=? and ${Data.MIMETYPE} in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "${RawContacts.CONTACT_ID}=? and ${Data.MIMETYPE} in (?)",
                         arrayOf(
                             contactId,
-                            StructuredName.CONTENT_ITEM_TYPE,
-                            Nickname.CONTENT_ITEM_TYPE,
-                            Phone.CONTENT_ITEM_TYPE,
-                            Email.CONTENT_ITEM_TYPE,
-                            StructuredPostal.CONTENT_ITEM_TYPE,
-                            Organization.CONTENT_ITEM_TYPE,
-                            Website.CONTENT_ITEM_TYPE,
-                            Im.CONTENT_ITEM_TYPE,
-                            Event.CONTENT_ITEM_TYPE,
-                            Note.CONTENT_ITEM_TYPE
+                            Phone.CONTENT_ITEM_TYPE
                         )
                     )
                     .build()
             )
             
-            
-
             try {
                 resolver.applyBatch(ContactsContract.AUTHORITY, ArrayList(ops))
             }
@@ -486,37 +475,15 @@ class FlutterContacts {
                     )
                     .build()
             )
-
             
-           
             for(account in contact.accounts){
                 val rawContactId = account.rawId
-                fun emptyToNull(s: String): String? = if (s.isEmpty()) "" else s
-            
-                fun newInsert(): ContentProviderOperation.Builder =
-                    if (rawContactId != null)
-                        ContentProviderOperation
-                            .newInsert(Data.CONTENT_URI)
-                            .withValue(Data.RAW_CONTACT_ID, rawContactId)
-                    else
-                        ContentProviderOperation
-                            .newInsert(Data.CONTENT_URI)
-                            .withValueBackReference(Data.RAW_CONTACT_ID, 0)
-
-                val name: PName = contact.name
-
-                for ((i, phone) in contact.phones.withIndex()) {
-                    val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
-                    ops.add(
-                        newInsert()
-                            .withValue(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE)
-                            .withValue(Phone.NUMBER, emptyToNull(phone.number))
-                            .withValue(Phone.TYPE, labelPair.label)
-                            .withValue(Phone.LABEL, emptyToNull(labelPair.customLabel))
-                            .withValue(Data.IS_PRIMARY, if (phone.isPrimary) 1 else 0)
-                            .build()
-                    )
+                
+                buildOpsForPhone(contact, ops, rawContactId)
+                if (contact.photo != null) {
+                    buildOpsForPhoto(resolver, contact.photo!!, ops, rawContactId.toLong())
                 }
+
             }
             // Save
             
@@ -790,13 +757,49 @@ class FlutterContacts {
             }
         }
 
+        private fun buildOpsForPhone(
+            contact: Contact,
+            ops: MutableList<ContentProviderOperation>,
+            rawContactId: String? = null
+        ) {
+            fun emptyToNull(s: String): String? = if (s.isEmpty()) "" else s
+           
+            fun newInsert(): ContentProviderOperation.Builder =
+                if (rawContactId != null)
+                    ContentProviderOperation
+                        .newInsert(Data.CONTENT_URI)
+                        .withValue(Data.RAW_CONTACT_ID, rawContactId)
+                else
+                    ContentProviderOperation
+                        .newInsert(Data.CONTENT_URI)
+                        .withValueBackReference(Data.RAW_CONTACT_ID, 0)
+
+            val name: PName = contact.name
+            
+            
+            for ((i, phone) in contact.phones.withIndex()) {
+                val labelPair: PhoneLabelPair = getPhoneLabelInv(phone.label, phone.customLabel)
+                ops.add(
+                    newInsert()
+                        .withValue(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE)
+                        .withValue(Phone.NUMBER, emptyToNull(phone.number))
+                        .withValue(Phone.TYPE, labelPair.label)
+                        .withValue(Phone.LABEL, emptyToNull(labelPair.customLabel))
+                        .withValue(Data.IS_PRIMARY, if (phone.isPrimary) 1 else 0)
+                        .build()
+                )
+            }
+                                  
+        }
+
         private fun buildOpsForContact(
             contact: Contact,
             ops: MutableList<ContentProviderOperation>,
             rawContactId: String? = null
         ) {
             fun emptyToNull(s: String): String? = if (s.isEmpty()) "" else s
-            
+            println(contact.displayName)
+            println(rawContactId)
             fun newInsert(): ContentProviderOperation.Builder =
                 if (rawContactId != null)
                     ContentProviderOperation
