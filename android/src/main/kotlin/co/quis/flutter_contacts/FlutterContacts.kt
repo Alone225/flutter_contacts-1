@@ -472,8 +472,7 @@ class FlutterContacts {
                 return "cannot update contact without raw contact ID"
             }
             val contactId = contact.id
-            val rawContactId = contact.accounts.first().rawId
-
+           
             // Update name and other properties, by deleting existing ones and creating
             // new ones
             ops.add(
@@ -496,25 +495,28 @@ class FlutterContacts {
                     )
                     .build()
             )
-            
             if (deletePhoto) {
-                ops.add(
-                    ContentProviderOperation.newDelete(Data.CONTENT_URI)
-                        .withSelection(
-                            "${RawContacts.CONTACT_ID}=? and ${Data.MIMETYPE}=?",
-                            arrayOf(
-                                contactId,
-                                Photo.CONTENT_ITEM_TYPE
+                    ops.add(
+                        ContentProviderOperation.newDelete(Data.CONTENT_URI)
+                            .withSelection(
+                                "${RawContacts.CONTACT_ID}=? and ${Data.MIMETYPE}=?",
+                                arrayOf(
+                                    contactId,
+                                    Photo.CONTENT_ITEM_TYPE
                             )
                         )
                         .build()
-                )
+                    )
             }
-            buildOpsForContact(contact, ops, rawContactId)
-            if (contact.photo != null) {
-                buildOpsForPhoto(resolver, contact.photo!!, ops, rawContactId.toLong())
-            }
+            for(account in contact.accounts){
+                val rawContactId = account.rawId
+                
+                buildOpsForContact(contact, ops, rawContactId)
+                if (contact.photo != null) {
+                    buildOpsForPhoto(resolver, contact.photo!!, ops, rawContactId.toLong())
+                }
 
+            }
             // Save
             
 
@@ -524,8 +526,6 @@ class FlutterContacts {
             catch (e: Exception) {
                 }
             
-           
-
             return null
         }
 
