@@ -470,7 +470,7 @@ class FlutterContacts {
                         "${RawContacts.CONTACT_ID}=? and ${Data.MIMETYPE} in (?)",
                         arrayOf(
                             contactId,
-                            Phone.CONTENT_ITEM_TYPE,
+                            Phone.CONTENT_ITEM_TYPE
                         )
                     )
                     .build()
