@@ -106,6 +106,12 @@ class FlutterContacts {
         'update', [contact.toJson(includePhoto: true), deletePhoto]);
   }
 
+  static Future clearProperties(Contact contact,
+      {bool deletePhoto = false}) async {
+    
+    await _channel.invokeMethod(
+        'clearProperties', [contact.toJson(includePhoto: true), deletePhoto]);
+  }
   ///////////////////////////////////////////////////
   ///              DELETING CONTACTS              ///
   ///////////////////////////////////////////////////

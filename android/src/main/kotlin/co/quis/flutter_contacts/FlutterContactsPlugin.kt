@@ -101,6 +101,22 @@ public class FlutterContactsPlugin : FlutterPlugin, MethodCallHandler, EventChan
                         }
                     }
                 }
+            "clearProperties" ->
+                GlobalScope.launch(Dispatchers.IO) {
+                    val args = call.arguments as List<*>
+                    val errorMessage: String? =
+                        FlutterContacts.clearProperties(
+                            resolver!!, args[0] as Map<String, Any>,
+                            args[1] as Boolean
+                        )
+                    GlobalScope.launch(Dispatchers.Main) {
+                        if (errorMessage == null) {
+                            result.success(null)
+                        } else {
+                            result.error("", errorMessage, "")
+                        }
+                    }
+                }
             // Delete contacts with given IDs
             "delete" ->
                 GlobalScope.launch(Dispatchers.IO) {

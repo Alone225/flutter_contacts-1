@@ -408,6 +408,55 @@ class FlutterContacts {
             return newContacts[0]
         }
 
+        fun clearProperties(
+            resolver: ContentResolver,
+            contactMap: Map<String, Any?>,
+            deletePhoto: Boolean
+        ): String? {
+            val ops = mutableListOf<ContentProviderOperation>()
+
+            val contact = Contact.fromMap(contactMap)
+
+            // We'll use the first raw contact ID for adds. There might a better way to
+            // do this...
+            if (contact.accounts.isEmpty()) {
+                return "cannot update contact without raw contact ID"
+            }
+            val contactId = contact.id
+            val rawContactId = contact.accounts.first().rawId
+
+            // Update name and other properties, by deleting existing ones and creating
+            // new ones
+            ops.add(
+                ContentProviderOperation.newDelete(Data.CONTENT_URI)
+                    .withSelection(
+                        "${RawContacts.CONTACT_ID}=? and ${Data.MIMETYPE} in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        arrayOf(
+                            contactId,
+                            StructuredName.CONTENT_ITEM_TYPE,
+                            Nickname.CONTENT_ITEM_TYPE,
+                            Phone.CONTENT_ITEM_TYPE,
+                            Email.CONTENT_ITEM_TYPE,
+                            StructuredPostal.CONTENT_ITEM_TYPE,
+                            Organization.CONTENT_ITEM_TYPE,
+                            Website.CONTENT_ITEM_TYPE,
+                            Im.CONTENT_ITEM_TYPE,
+                            Event.CONTENT_ITEM_TYPE,
+                            Note.CONTENT_ITEM_TYPE
+                        )
+                    )
+                    .build()
+            )
+            
+            
+
+            try {
+                resolver.applyBatch(ContactsContract.AUTHORITY, ArrayList(ops))
+            }
+            catch (e: Exception) {
+                }
+            return null
+        }
         fun update(
             resolver: ContentResolver,
             contactMap: Map<String, Any?>,
