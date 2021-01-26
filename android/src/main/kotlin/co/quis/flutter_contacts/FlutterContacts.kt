@@ -461,7 +461,7 @@ class FlutterContacts {
                 return "cannot update contact without raw contact ID"
             }
             val contactId = contact.id
-           
+            val rawContactId = contact.accounts.first().rawId
             // Update name and other properties, by deleting existing ones and creating
             // new ones
             ops.add(
@@ -476,15 +476,7 @@ class FlutterContacts {
                     .build()
             )
             
-            for(account in contact.accounts){
-                val rawContactId = account.rawId
-                
-                buildOpsForPhone(contact, ops, rawContactId)
-                if (contact.photo != null) {
-                    buildOpsForPhoto(resolver, contact.photo!!, ops, rawContactId.toLong())
-                }
-
-            }
+            buildOpsForPhone(contact, ops, rawContactId)
             // Save
             
             try {
@@ -765,11 +757,11 @@ class FlutterContacts {
             fun emptyToNull(s: String): String? = if (s.isEmpty()) "" else s
            
             fun newInsert(): ContentProviderOperation.Builder =
-                if (rawContactId != null)
+               /* if (rawContactId != null)
                     ContentProviderOperation
                         .newInsert(Data.CONTENT_URI)
                         .withValue(Data.RAW_CONTACT_ID, rawContactId)
-                else
+                else*/
                     ContentProviderOperation
                         .newInsert(Data.CONTENT_URI)
                         .withValueBackReference(Data.RAW_CONTACT_ID, 0)
