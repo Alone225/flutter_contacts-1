@@ -38,7 +38,7 @@ class FlutterContacts {
   }) async {
     final contacts = await _get(
         id: id,
-        withDetails: false,
+        withDetails: true,
         withPhotos: false,
         useHighResolutionPhotos: useHighResolutionPhotos,
         deduplicateEmailsAndPhones: deduplicateEmailsAndPhones);
