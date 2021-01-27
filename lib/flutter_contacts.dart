@@ -38,8 +38,8 @@ class FlutterContacts {
   }) async {
     final contacts = await _get(
         id: id,
-        withDetails: true,
-        withPhotos: true,
+        withDetails: false,
+        withPhotos: false,
         useHighResolutionPhotos: useHighResolutionPhotos,
         deduplicateEmailsAndPhones: deduplicateEmailsAndPhones);
     if (contacts.isEmpty) return null;
